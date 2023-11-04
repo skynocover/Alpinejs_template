@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('todolist', () => ({
+        date: new Date().toLocaleString(),
+        viewCheck: 'true',
+        list: [{ thing: 'check something', check: false }],
+        inputText: '',
+        search: '',
+        open: true,
+        toggle() {
+          this.open = !this.open;
+        },
+
+        create() {
+          if (this.inputText.trim() !== '') {
+            this.list.push({ thing: this.inputText, check: false });
+            this.inputText = '';
+            this.search = ''; // Clear search to reset the filter
+          }
+        },
+
+        check(i) {
+          this.list[i].check = !this.list[i].check;
+        },
+
+        deleteItem(i) {
+          this.list.splice(i, 1);
+        },
+
+        init() {
+          this.$watch('search', (value) => {
+            console.log(value);
+          });
+        },
+
+        get filteredList() {
+          const normalizedSearch = this.search.toLowerCase();
+          return this.list
+            .filter((item) =>
+              item.thing.toLowerCase().includes(normalizedSearch),
+            )
+            .filter((item) => this.viewCheck === 'true' || !item.check);
+        },
+
+        placeholder: 'search something',
+      }));
+    });
+  </script>
+</head>
+
+<body>
+  <div x-data="todolist">
+    <button @click="toggle">hide</button>
+    <!-- show transition  -->
+    <span x-show="open" x-transition.duration.1000ms x-text="date"></span>
+    <br />
+    <span>Search: </span>
+    <!-- model debounce bind -->
+    <input type="text" x-model.debounce="search" :placeholder="placeholder" />
+    <button @click="search=''">clear</button>
+
+    <!-- model radio -->
+    <span>顯示check</span>
+    <input type="radio" value="true" x-model="viewCheck" />
+    <span>不顯示check</span>
+    <input type="radio" value="false" x-model="viewCheck" />
+
+    <br />
+    <input type="text" x-model="inputText" />
+    <button @click="create">Add new Todo</button>
+    <br />
+    <!-- for -->
+    <template x-for="(listitem,index) in filteredList">
+      <li>
+        <!-- bind -->
+        <span
+          :style="{'text-decoration': listitem.check ?'line-through':''}"
+          x-text="index+': '"
+        ></span>
+        <span
+          :style="{'text-decoration': listitem.check ?'line-through':''}"
+          x-text="listitem.thing"
+        ></span>
+        <button @click="check(index)">check</button>
+        <button @click="deleteItem(index)">delete</button>
+      </li>
+    </template>
+  </div>
+</body>

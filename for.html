@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- x-for -->
+
+  <ul x-data="">
+    <template x-for="color in $store.site.colors" :key="color.id">
+      <li x-text="color.label"></li>
+    </template>
+
+    <!-- for with key 在需要新增刪除的時候一定要用 可以抓出index -->
+    <template x-for="(color,index) in $store.site.colors" :key="color.id">
+      <li>
+        <span x-text="index+': '"></span>
+        <span x-text="color.label"></span>
+      </li>
+    </template>
+  </ul>
+  <!-- range -->
+  <ul>
+    <template x-for="i in 10">
+      <li x-text="i"></li>
+    </template>
+  </ul>
+</body>

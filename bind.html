@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('dropdown', () => ({
+        open: false,
+
+        trigger: {
+          ['x-ref']: 'trigger',
+          ['@click']() {
+            this.open = true;
+          },
+        },
+
+        dialogue: {
+          ['x-show']() {
+            return this.open;
+          },
+          ['@click.outside']() {
+            this.open = false;
+          },
+        },
+      }));
+    });
+  </script>
+</head>
+
+<body>
+  <!-- bind用來綁定js表達式 在畫面上會另外render-->
+  <div x-data="{ placeholder: 'Type here...' }">
+    <input type="text" x-bind:placeholder="placeholder" />
+    <!-- 語法糖 -->
+    <input type="text" :placeholder="placeholder" />
+  </div>
+
+  <div x-data="{ open: true }">
+    <button @click="open= !open">toggle</button>
+
+    <div :class="{ 'hidden': !open }">Dropdown Contents...</div>
+
+    <div :style="{display:open?'flex':''}">
+      <!-- 會render出  <div style="display: flex;" ...> -->
+      <p>A</p>
+      <p>B</p>
+    </div>
+    <div
+      :style="{ color: 'red', display: 'flex',hidden:open }"
+      x-text="open"
+    ></div>
+  </div>
+
+  <div x-data="dropdown">
+    <button x-bind="trigger">Open Dropdown</button>
+    <span x-bind="dialogue">Dropdown Contents</span>
+  </div>
+</body>

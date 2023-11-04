@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <!-- data -->
+  <div
+    x-data="{ colors:[],answer:'', message:'msg',color:'',username:'',age:0}"
+  >
+    <!-- x-model 雙向連結 -->
+    <input type="text" x-model="message" />
+    Message: <span x-text="message"></span>
+    <br />
+    <button x-on:click="message = 'changed'">Change Message</button>
+    <br />
+    <!-- checkbox -->
+    <input type="checkbox" value="red" x-model="colors" />
+    <input type="checkbox" value="orange" x-model="colors" />
+    <input type="checkbox" value="yellow" x-model="colors" />
+    <span x-text="colors"></span>
+
+    <!-- radio -->
+    <input type="radio" value="yes" x-model="answer" />
+    <input type="radio" value="no" x-model="answer" />
+    <span x-text="answer"></span>
+
+    <!-- select  可單選可複選-->
+    <select x-model="color" multiple>
+      <option value="" disabled>Select A Color</option>
+      <option>Red</option>
+      <option>Orange</option>
+      <option>Yellow</option>
+    </select>
+
+    Color: <span x-text="color"></span>
+
+    <!-- lazy 讓他不要即時反應-->
+    <br />
+    <input type="text" x-model.lazy="username" />
+    <span x-show="username.length > 20">The username is too long.</span>
+
+    <!-- debounce -->
+    <br />
+    <span>Debounce</span><input type="text" x-model.debounce="message" />
+
+    <!-- modelable 將內部的model暴露出去-->
+    <div x-data="{ number: 5 }">
+      <div x-data="{ count: 0 }" x-modelable="count" x-model="number">
+        <button @click="count++">Increment</button>
+      </div>
+      Number: <span x-text="number"></span>
+    </div>
+  </div>
+</body>

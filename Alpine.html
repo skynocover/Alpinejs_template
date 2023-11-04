@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('dropdown', () => ({
+        open: false,
+
+        toggle() {
+          this.open = !this.open;
+        },
+      }));
+
+      Alpine.data('initState', (initialOpenState = false) => ({
+        open: initialOpenState,
+
+        toggle() {
+          this.open = !this.open;
+        },
+      }));
+
+      // 初始化與解除
+      Alpine.data('timer', () => ({
+        timer: null,
+        counter: 0,
+        init() {
+          // Register an event handler that references the component instance
+          this.timer = setInterval(() => {
+            console.log('Increased counter to', ++this.counter);
+          }, 1000);
+        },
+        destroy() {
+          // Detach the handler, avoiding memory and side-effect leakage
+          clearInterval(this.timer);
+        },
+      }));
+
+      // store 用於全域
+      Alpine.store('darkMode', {
+        init() {
+          this.on = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        },
+
+        on: false,
+
+        toggle() {
+          this.on = !this.on;
+        },
+      });
+
+      // reuse bind
+      Alpine.bind('SomeButton', () => ({
+        type: 'button',
+
+        '@click'() {
+          this.doSomething();
+        },
+
+        ':disabled'() {
+          return this.shouldDisable;
+        },
+      }));
+
+      Alpine.data('bindData', () => ({
+        shouldDisable: false,
+        doSomething() {
+          console.log('do some thing');
+        },
+      }));
+    });
+  </script>
+</head>
+
+<body>
+  <div x-data="dropdown">
+    <button @click="toggle">...</button>
+
+    <div x-show="open">...</div>
+  </div>
+
+  <!-- 初始化 -->
+  <div x-data="initState(true)">
+    <button @click="toggle">...</button>
+
+    <div x-show="open">...</div>
+  </div>
+
+  <!-- 初始化與解除 -->
+  <span x-data="{ enabled: false }">
+    <button @click.prevent="enabled = !enabled">Toggle</button>
+
+    <template x-if="enabled">
+      <span x-data="timer" x-text="counter"></span>
+    </template>
+  </span>
+
+  <!-- Store -->
+  <div x-data>
+    <span x-text="$store.darkMode.on ? 'dark': 'light'"></span>
+    <button @click="$store.darkMode.on = !$store.darkMode.on">darkMode</button>
+  </div>
+
+  <!-- bind -->
+  <div x-data="bindData">
+    <button type="button" @click="doSomething()" :disabled="shouldDisable">
+      no Binding
+    </button>
+
+    <button x-bind="SomeButton">binding</button>
+  </div>
+</body>

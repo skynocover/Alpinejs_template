@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>動態內容加載範例</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      .container {
+        display: flex;
+        height: 100%;
+      }
+      .left-side {
+        width: 20%;
+        background-color: #f7f7f7;
+      }
+      .right-side {
+        width: 80%;
+        border-left: 1px solid #ccc;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-side">
+        <ul>
+          <li>
+            <a href="todolist.html" target="cont">首頁</a>
+          </li>
+          <li>
+            <a href="bind.html" target="cont">bind</a>
+          </li>
+          <li>
+            <a href="data.html" target="cont">data</a>
+          </li>
+          <li>
+            <a href="dispatch.html" target="cont">dispatch</a>
+          </li>
+          <li>
+            <a href="for.html" target="cont">for</a>
+          </li>
+          <li>
+            <a href="init.html" target="cont">init</a>
+          </li>
+          <li>
+            <a href="model.html" target="cont">model</a>
+          </li>
+          <li>
+            <a href="on.html" target="cont">on</a>
+          </li>
+          <li>
+            <a href="Alpine.html" target="cont">Alpine</a>
+          </li>
+
+          <li>
+            <a href="utils.html" target="cont">utils</a>
+          </li>
+        </ul>
+      </div>
+      <iframe
+        class="right-side"
+        name="cont"
+        height="100%"
+        width="100%"
+        src="todolist.html"
+      ></iframe>
+    </div>
+  </body>
+</html>

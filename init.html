@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('dropdown', () => ({
+        init() {
+          console.log(
+            'I will get evaluated when initializing each "dropdown" component.',
+          );
+        },
+      }));
+    });
+  </script>
+</head>
+
+<body>
+  <!-- 可以不需要在x-data內 -->
+  <div x-init="console.log('It is init')"></div>
+  <!-- data -->
+  <div x-data="dropdown">
+    <!-- init -->
+    <div x-init="date = new Date()"></div>
+    <div x-text="date"></div>
+  </div>
+
+  <!-- 可以拿來call api -->
+  <!-- <div x-data="{ posts: [] }" x-init="posts = await (await fetch('/posts')).json()">...</div> -->
+
+  <!-- 類似useEffect(...,[]) -->
+  <div x-init="$nextTick(() => { console.log('It is nextTick') })"></div>
+</body>

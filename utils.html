@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="http://unpkg.com/alpinejs" defer></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- data -->
+  <div x-data="{ open: false,date:new Date(), message:'msg'}">
+    <!-- on -->
+    <button @click="open = !open">Expand</button>
+    <button x-on:click="open = !open">Toggle</button>
+
+    <!-- show  transition -->
+    <div x-show="open" x-transition>
+      <div>
+        Copyright ©
+        <span x-text="date.getFullYear()"></span>
+      </div>
+    </div>
+
+    <div x-show="open" x-transition.duration.1000ms>
+      <span x-text="date.getFullYear()"></span>
+    </div>
+
+    <!-- if  只能用於template 直接從dom上面移除 而不是隱藏 所以沒有transition-->
+    <!-- template內只能有一個根元素 -->
+    <template x-if="open">
+      <div x-text="date"></div>
+    </template>
+
+    <!-- html -->
+    <div x-data="{ username: '<strong>calebporzio</strong>' }">
+      Username: <span x-html="username"></span>
+    </div>
+
+    <!-- effect -->
+    <div x-effect="console.log('open is '+open)"></div>
+
+    <!-- Prevent a block of HTML from being initialized by Alpine -->
+    <div x-data="{ label: 'From Alpine' }">
+      <div x-ignore>
+        <span x-text="label">123</span>
+      </div>
+    </div>
+
+    <!-- ref $refs -->
+    <input type="text" x-ref="content" />
+    <button x-on:click="navigator.clipboard.writeText($refs.content.value)">
+      Copy
+    </button>
+
+    <!-- hide until finish init -->
+    <div x-cloak>...</div>
+  </div>
+
+  <!-- 
+  
+  properties 
+  
+  -->
+
+  <!-- $el -->
+  <div x-data>
+    <button @click="$el.innerHTML = 'Hello World!'">
+      Replace me with "Hello World!"
+    </button>
+  </div>
+
+  <!-- dispatch dispatch a browser event from curren element -->
+  <!-- <div x-on:notify="...">
+    <button x-on:click="$dispatch('notify')">...</button>
+  </div> -->
+
+  <!-- watch 查看特定某個 effect則是內部所有的都會監聽-->
+  <div x-data="{count:0}">
+    <div
+      x-init="$watch('count', value => {console.log('count is ' + value) })"
+    ></div>
+
+    <div x-text="count"></div>
+    <button @click="count=count+1">Count+1</button>
+  </div>
+
+  <!-- old value -->
+  <div
+    x-data="{ open: false }"
+    x-init="$watch('open', (value, oldValue) => console.log(value, oldValue))"
+  >
+    <button @click="open = ! open">Toggle Open</button>
+  </div>
+
+  <!-- nest -->
+  <div
+    x-data="{ foo: { bar: 'baz' }}"
+    x-init="$watch('foo.bar', value => console.log(value))"
+  >
+    <button @click="foo.bar = 'bob'">Toggle Open</button>
+  </div>
+
+  <!-- Alpine.watch('count', () => {
+    // 當 count 變化時，執行這裡的函式
+  });
+ -->
+
+  <!-- nextTick 可以強制在執行完後觸發-->
+  <div x-data="{ title: 'Hello' }">
+    <button
+      @click="
+            title = 'Hello World!';
+            console.log('org title: '+$el.innerText) 
+            $nextTick(() => { console.log('new title: '+$el.innerText) });
+            await $nextTick(); //如果需要可以await
+        "
+      x-text="title"
+    ></button>
+  </div>
+
+  <!-- 類似useEffect(...,[]) -->
+  <div x-init="$nextTick(() => { console.log('It is nextTick') })"></div>
+
+  <!-- 抓取data -->
+  <div x-data="{ greeting: 'Hello' }">
+    <div x-data="{ name: 'Caleb' }">
+      <button @click="sayHello($data)">Say Hello</button>
+    </div>
+  </div>
+
+  <script>
+    function sayHello({ greeting, name }) {
+      console.log(greeting + ' ' + name + '!');
+    }
+  </script>
+</body>

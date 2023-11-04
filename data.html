@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Alpine Data</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="//unpkg.com/alpinejs" defer></script>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('dropdown', () => ({
+        p: 'p',
+        open: true,
+        toggle() {
+          this.open = !this.open;
+        },
+      }));
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Everything in Alpine starts with the x-data directive. -->
+  <!-- alpine.data -->
+  <div x-data="dropdown">
+    <input type="text" x-model="p" />
+    <button x-on:click="toggle">toggle</button>
+    <span x-text="p" x-show="open"></span>
+  </div>
+
+  <!-- data -->
+  <div
+    x-data="{
+      open: false,
+      get isOpen() { return this.open },
+      toggle() { this.open = ! this.open },
+  }"
+  >
+    <button @click="toggle()">Toggle Content</button>
+
+    <div x-show="isOpen">Content...</div>
+  </div>
+
+  <!-- data less -->
+  <div x-data="{}"></div>
+  <div x-data></div>
+
+  <!-- Single-element components -->
+  <div x-data="{ open: true }">
+    <button @click="open = false" x-show="open">Hide Me</button>
+  </div>
+
+  <button x-data="{ open: true }" @click="open = false" x-show="open">
+    Hide Me
+  </button>
+</body>
